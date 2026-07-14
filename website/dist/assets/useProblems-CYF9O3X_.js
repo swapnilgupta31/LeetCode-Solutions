@@ -539,7 +539,8 @@ public class Solution\r
 \r
         return answer;\r
     }\r
-}`,lastModified:"2026-07-11T14:21:32.330Z",dateLabel:"11 July 2026",dateISO:"2026-07-11",leetcodeNumber:2685},{id:"Daily Problems/9-7-26(3536).cs",number:3536,title:"Problem 3536",category:"Daily Problems",difficulty:"Medium",readme:"",solution:`// Approach:\r
+}\r
+`,lastModified:"2026-07-14T14:07:52.960Z",dateLabel:"11 July 2026",dateISO:"2026-07-11",leetcodeNumber:2685},{id:"Daily Problems/9-7-26(3536).cs",number:3536,title:"Problem 3536",category:"Daily Problems",difficulty:"Medium",readme:"",solution:`// Approach:\r
 // 1. Since nums is sorted, nodes belong to the same connected component\r
 //    as long as the difference between consecutive values is <= maxDiff.\r
 // 2. Assign a unique group id to every connected component.\r
@@ -1683,7 +1684,8 @@ public class Solution\r
 \r
         return answer;\r
     }\r
-}`,lastModified:"2026-07-11T14:21:32.330Z",dateLabel:"11 July 2026",dateISO:"2026-07-11",leetcodeNumber:2685},{id:"Medium/3536__daily",number:3536,title:"Problem 3536",category:"Medium",difficulty:"Medium",readme:"",solution:`// Approach:\r
+}\r
+`,lastModified:"2026-07-14T14:07:52.960Z",dateLabel:"11 July 2026",dateISO:"2026-07-11",leetcodeNumber:2685},{id:"Medium/3536__daily",number:3536,title:"Problem 3536",category:"Medium",difficulty:"Medium",readme:"",solution:`// Approach:\r
 // 1. Since nums is sorted, nodes belong to the same connected component\r
 //    as long as the difference between consecutive values is <= maxDiff.\r
 // 2. Assign a unique group id to every connected component.\r
