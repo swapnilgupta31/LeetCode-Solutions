@@ -25,8 +25,7 @@ export default function ProblemTable({ problems }: Props) {
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-secondary border-b border-border text-left">
-            <th className="px-4 py-2.5 font-medium text-gray-600 w-16">#</th>
-            <th className="px-4 py-2.5 font-medium text-gray-600">Problem</th>
+            <th className="px-4 py-2.5 font-medium text-gray-600">#</th>
             <th className="px-4 py-2.5 font-medium text-gray-600 w-24">Difficulty</th>
             <th className="px-4 py-2.5 font-medium text-gray-600 w-32 hidden sm:table-cell">Updated</th>
             <th className="px-4 py-2.5 font-medium text-gray-600 w-16"></th>
@@ -39,10 +38,9 @@ export default function ProblemTable({ problems }: Props) {
               className="hover:bg-secondary transition-colors cursor-pointer"
               onClick={() => window.location.href = `/problem/${encodeURIComponent(p.id)}`}
             >
-              <td className="px-4 py-3 text-muted font-mono text-xs">
-                {p.number ?? "—"}
+              <td className="px-4 py-3 font-mono font-medium text-gray-900">
+                {p.number != null ? `#${p.number}` : "—"}
               </td>
-              <td className="px-4 py-3 font-medium text-gray-900 text-sm">{p.title}</td>
               <td className="px-4 py-3">
                 <DifficultyBadge difficulty={p.difficulty} />
               </td>

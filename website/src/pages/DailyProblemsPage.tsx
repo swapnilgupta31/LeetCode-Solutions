@@ -106,24 +106,23 @@ export default function DailyProblemsPage() {
             <thead>
               <tr className="bg-secondary border-b border-border text-left">
                 <th className="px-4 py-2.5 font-medium text-gray-600">Date</th>
-                <th className="px-4 py-2.5 font-medium text-gray-600">Problem</th>
+                <th className="px-4 py-2.5 font-medium text-gray-600">#</th>
                 <th className="px-4 py-2.5 font-medium text-gray-600 w-24">Difficulty</th>
                 <th className="px-4 py-2.5 font-medium text-gray-600 w-16"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {filtered.map((p) => (
-                <tr key={p.id} className="hover:bg-secondary transition-colors">
+                <tr
+                  key={p.id}
+                  className="hover:bg-secondary transition-colors cursor-pointer"
+                  onClick={() => window.location.href = `/problem/${encodeURIComponent(p.id)}`}
+                >
                   <td className="px-4 py-3 text-muted text-xs whitespace-nowrap">
                     {p.dateLabel || "—"}
                   </td>
-                  <td className="px-4 py-3 font-medium text-gray-900">
-                    {p.leetcodeNumber !== null ? (
-                      <span>
-                        <span className="font-mono text-muted mr-2">#{p.leetcodeNumber}</span>
-                        {p.title}
-                      </span>
-                    ) : p.title}
+                  <td className="px-4 py-3 font-mono font-medium text-gray-900">
+                    {p.leetcodeNumber !== null ? `#${p.leetcodeNumber}` : "—"}
                   </td>
                   <td className="px-4 py-3">
                     <DifficultyBadge difficulty={p.difficulty} />
@@ -131,9 +130,10 @@ export default function DailyProblemsPage() {
                   <td className="px-4 py-3">
                     <Link
                       to={`/problem/${encodeURIComponent(p.id)}`}
-                      className="text-accent hover:underline font-medium"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-block text-xs font-medium text-accent border border-accent rounded px-2.5 py-1 hover:bg-accent hover:text-white transition-colors whitespace-nowrap"
                     >
-                      Open
+                      Open →
                     </Link>
                   </td>
                 </tr>
