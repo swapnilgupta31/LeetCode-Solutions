@@ -108,7 +108,7 @@ export default function DailyProblemsPage() {
               to={`/problem/${encodeURIComponent(p.id)}`}
               className="flex items-center justify-between px-4 py-3 bg-white hover:bg-secondary transition-colors gap-3"
             >
-              <span className="text-xs text-muted whitespace-nowrap w-28 shrink-0">{p.dateLabel || "—"}</span>
+              <span className="text-xs text-muted whitespace-nowrap shrink-0">{p.dateLabel || "—"}</span>
               <span className="font-mono font-medium text-gray-900 shrink-0">
                 {p.leetcodeNumber !== null ? `#${p.leetcodeNumber}` : "—"}
               </span>
