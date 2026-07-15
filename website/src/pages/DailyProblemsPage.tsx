@@ -97,49 +97,27 @@ export default function DailyProblemsPage() {
         )}
       </div>
 
-      {/* Table */}
+      {/* List */}
       {filtered.length === 0 ? (
         <p className="text-muted py-8 text-center text-sm">No problems found for this filter.</p>
       ) : (
-        <div className="border border-border rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-secondary border-b border-border text-left">
-                <th className="px-4 py-2.5 font-medium text-gray-600">Date</th>
-                <th className="px-4 py-2.5 font-medium text-gray-600">#</th>
-                <th className="px-4 py-2.5 font-medium text-gray-600 w-24">Difficulty</th>
-                <th className="px-4 py-2.5 font-medium text-gray-600 w-16"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filtered.map((p) => (
-                <tr
-                  key={p.id}
-                  className="hover:bg-secondary transition-colors cursor-pointer"
-                  onClick={() => window.location.href = `/problem/${encodeURIComponent(p.id)}`}
-                >
-                  <td className="px-4 py-3 text-muted text-xs whitespace-nowrap">
-                    {p.dateLabel || "—"}
-                  </td>
-                  <td className="px-4 py-3 font-mono font-medium text-gray-900">
-                    {p.leetcodeNumber !== null ? `#${p.leetcodeNumber}` : "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <DifficultyBadge difficulty={p.difficulty} />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Link
-                      to={`/problem/${encodeURIComponent(p.id)}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-block text-xs font-medium text-accent border border-accent rounded px-2.5 py-1 hover:bg-accent hover:text-white transition-colors whitespace-nowrap"
-                    >
-                      Open →
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="border border-border rounded-lg overflow-hidden divide-y divide-border">
+          {filtered.map((p) => (
+            <Link
+              key={p.id}
+              to={`/problem/${encodeURIComponent(p.id)}`}
+              className="flex items-center justify-between px-4 py-3 bg-white hover:bg-secondary transition-colors gap-3"
+            >
+              <span className="text-xs text-muted whitespace-nowrap w-28 shrink-0">{p.dateLabel || "—"}</span>
+              <span className="font-mono font-medium text-gray-900 shrink-0">
+                {p.leetcodeNumber !== null ? `#${p.leetcodeNumber}` : "—"}
+              </span>
+              <span className="flex-1"><DifficultyBadge difficulty={p.difficulty} /></span>
+              <span className="text-xs font-medium text-accent border border-accent rounded px-2.5 py-1 whitespace-nowrap shrink-0">
+                Open →
+              </span>
+            </Link>
+          ))}
         </div>
       )}
     </div>
