@@ -34,23 +34,28 @@ export default function ProblemTable({ problems }: Props) {
         </thead>
         <tbody className="divide-y divide-border">
           {problems.map((p) => (
-            <tr key={p.id} className="hover:bg-secondary transition-colors">
-              <td className="px-4 py-3 text-muted font-mono">
+            <tr
+              key={p.id}
+              className="hover:bg-secondary transition-colors cursor-pointer"
+              onClick={() => window.location.href = `/problem/${encodeURIComponent(p.id)}`}
+            >
+              <td className="px-4 py-3 text-muted font-mono text-xs">
                 {p.number ?? "—"}
               </td>
-              <td className="px-4 py-3 font-medium text-gray-900">{p.title}</td>
+              <td className="px-4 py-3 font-medium text-gray-900 text-sm">{p.title}</td>
               <td className="px-4 py-3">
                 <DifficultyBadge difficulty={p.difficulty} />
               </td>
-              <td className="px-4 py-3 text-muted hidden sm:table-cell">
+              <td className="px-4 py-3 text-muted hidden sm:table-cell text-sm">
                 {formatDate(p.lastModified)}
               </td>
               <td className="px-4 py-3">
                 <Link
                   to={`/problem/${encodeURIComponent(p.id)}`}
-                  className="text-accent hover:underline font-medium"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-block text-xs font-medium text-accent border border-accent rounded px-2.5 py-1 hover:bg-accent hover:text-white transition-colors whitespace-nowrap"
                 >
-                  Open
+                  Open →
                 </Link>
               </td>
             </tr>

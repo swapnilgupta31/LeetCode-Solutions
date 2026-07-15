@@ -22,7 +22,11 @@ export default function Home() {
       {/* Category cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {CATEGORIES.map(({ label, path, description }) => (
-          <div key={label} className="border border-border rounded-lg p-5 bg-white hover:border-accent transition-colors">
+          <Link
+            key={label}
+            to={path}
+            className="block border border-border rounded-lg p-5 bg-white hover:border-accent hover:shadow-sm transition-colors"
+          >
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="font-semibold text-gray-900 text-base">{label}</h2>
@@ -33,14 +37,11 @@ export default function Home() {
               </span>
             </div>
             <div className="mt-4">
-              <Link
-                to={path}
-                className="inline-block text-xs font-medium text-accent border border-accent rounded px-3 py-1.5 hover:bg-accent hover:text-white transition-colors"
-              >
+              <span className="inline-block text-xs font-medium text-accent border border-accent rounded px-3 py-1.5 group-hover:bg-accent group-hover:text-white transition-colors">
                 Open →
-              </Link>
+              </span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
