@@ -63,7 +63,6 @@ public class Solution
             a = b;
             b = temp;
         }
-
         return a;
     }
 }
