@@ -1,4 +1,5 @@
 {
+  "1260": "Medium",
   "1288": "Medium",
   "1291": "Medium",
   "1331": "Easy",
@@ -6,10 +7,16 @@
   "2685": "Medium",
   "2812": "Medium",
   "3286": "Medium",
+  "3312": "Hard",
   "3336": "Hard",
+  "3499": "Medium",
+  "3501": "Medium",
+  "3513": "Medium",
+  "3514": "Medium",
   "3534": "Hard",
   "3536": "Medium",
-  "3754": "Easy",
   "3658": "Easy",
-  "3756": "Hard"
+  "3754": "Easy",
+  "3756": "Hard",
+  "3867": "Medium"
 }
