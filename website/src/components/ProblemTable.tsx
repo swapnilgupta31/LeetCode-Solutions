@@ -6,15 +6,6 @@ interface Props {
   problems: Problem[];
 }
 
-function formatDate(iso: string): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
 export default function ProblemTable({ problems }: Props) {
   if (problems.length === 0) {
     return <p className="text-muted py-8 text-center">No problems found.</p>;
@@ -25,9 +16,8 @@ export default function ProblemTable({ problems }: Props) {
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-secondary border-b border-border text-left">
-            <th className="px-4 py-2.5 font-medium text-gray-600">#</th>
+            <th className="px-4 py-2.5 font-medium text-gray-600">Problem</th>
             <th className="px-4 py-2.5 font-medium text-gray-600 w-24">Difficulty</th>
-            <th className="px-4 py-2.5 font-medium text-gray-600 w-32 hidden sm:table-cell">Updated</th>
             <th className="px-4 py-2.5 font-medium text-gray-600 w-16"></th>
           </tr>
         </thead>
@@ -38,14 +28,12 @@ export default function ProblemTable({ problems }: Props) {
               className="hover:bg-secondary transition-colors cursor-pointer"
               onClick={() => window.location.href = `/problem/${encodeURIComponent(p.id)}`}
             >
-              <td className="px-4 py-3 font-mono font-medium text-gray-900">
-                {p.number != null ? `#${p.number}` : "—"}
+              <td className="px-4 py-3">
+                <span className="font-mono text-muted text-xs mr-2">{p.number != null ? `#${p.number}` : "—"}</span>
+                <span className="font-medium text-gray-900 text-sm">{p.title}</span>
               </td>
               <td className="px-4 py-3">
                 <DifficultyBadge difficulty={p.difficulty} />
-              </td>
-              <td className="px-4 py-3 text-muted hidden sm:table-cell text-sm">
-                {formatDate(p.lastModified)}
               </td>
               <td className="px-4 py-3">
                 <Link
