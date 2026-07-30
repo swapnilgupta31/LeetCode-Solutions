@@ -212,9 +212,8 @@ function buildData(): string {
   // so they also appear on /easy, /medium, /hard pages.
   const dailyProblems = all.filter((p) => p.category === "Daily Problems");
   for (const dp of dailyProblems) {
-    if (dp.difficulty === "Daily") continue; // no detected difficulty, skip
+    if (dp.difficulty === "Daily") continue;
     const targetCat = dp.difficulty as Category;
-    // Only add if not already present (avoid duplicates if user also added a folder)
     const alreadyExists = all.some(
       (p) => p.category === targetCat && p.number === dp.number && p.number !== null
     );
@@ -223,7 +222,7 @@ function buildData(): string {
         ...dp,
         id: `${targetCat}/${dp.leetcodeNumber ?? dp.id}__daily`,
         category: targetCat,
-        // keep difficulty as Easy/Medium/Hard (already set correctly)
+        difficulty: dp.difficulty,
       });
     }
   }
