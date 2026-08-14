@@ -104,6 +104,29 @@ function loadDifficultyMap(): Record<string, Difficulty> {
 
 // ── Scanner ──────────────────────────────────────────────────────────────────
 
+function scanDailyFile(filePath: string, filename: string, category: Category, diffMap: Record<string, Difficulty>): ProblemEntry | null {
+  if (!filename.match(/\.(cs|java)$/i)) return null;
+  // Normalize dots to dashes for parsing: 5.8.26 -> 5-8-26
+  const normalized = filename.replace(/^(\d+)\.(\d+)\.(\d+)\(/, "$1-$2-$3(");
+  const parsed = parseDailyFilename(normalized);
+  if (!parsed) return null;
+  const lcNum = parsed.leetcodeNumber;
+  const diff: Difficulty = lcNum !== null && diffMap[String(lcNum)] ? diffMap[String(lcNum)] : "Daily";
+  return {
+    id: `${category}/${filename}`,
+    number: lcNum,
+    title: lcNum !== null ? `Problem ${lcNum}` : parseTitle(filename),
+    category,
+    difficulty: diff,
+    readme: "",
+    solution: readFile(filePath),
+    lastModified: lastModified(filePath),
+    dateLabel: parsed.dateLabel,
+    dateISO: parsed.dateISO,
+    leetcodeNumber: lcNum,
+  };
+}
+
 function scanCategory(category: Category, diffMap: Record<string, Difficulty>): ProblemEntry[] {
   const dir = path.join(REPO_ROOT, category);
   if (!fs.existsSync(dir)) return [];
@@ -115,58 +138,38 @@ function scanCategory(category: Category, diffMap: Record<string, Difficulty>): 
     const entryPath = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      const readme   = readFile(path.join(entryPath, "README.md"));
-      const solution = readFile(path.join(entryPath, "Solution.cs"));
-      const num      = parseNumber(entry.name);
-      const title    = parseTitle(entry.name);
-      const mtime    = lastModified(entryPath);
-
-      problems.push({
-        id: `${category}/${entry.name}`,
-        number: num,
-        title,
-        category,
-        difficulty: category === "Daily Problems" ? "Daily" : category as "Easy" | "Medium" | "Hard",
-        readme,
-        solution,
-        lastModified: mtime,
-        dateLabel: "",
-        dateISO: "",
-        leetcodeNumber: null,
-      });
-
-    } else if (entry.isFile() && entry.name.endsWith(".cs")) {
-      const solution = readFile(entryPath);
-      const mtime    = lastModified(entryPath);
-
       if (category === "Daily Problems") {
-        // Parse the special daily filename format
-        const parsed = parseDailyFilename(entry.name);
-        const lcNum  = parsed?.leetcodeNumber ?? null;
-        const diff: Difficulty =
-          lcNum !== null && diffMap[String(lcNum)]
-            ? diffMap[String(lcNum)]
-            : "Daily";
-
-        // Title: use the LeetCode number as the display title base
-        // e.g. "Problem 2812" until a better name is available
-        const title = lcNum !== null ? `Problem ${lcNum}` : parseTitle(entry.name);
-
+        // Recurse into month subfolders (July, August, etc.)
+        const subEntries = fs.readdirSync(entryPath, { withFileTypes: true });
+        for (const sub of subEntries) {
+          if (sub.isFile()) {
+            const p = scanDailyFile(path.join(entryPath, sub.name), sub.name, category, diffMap);
+            if (p) problems.push(p);
+          }
+        }
+      } else {
+        // Easy/Medium/Hard folder-based problem
+        const readme   = readFile(path.join(entryPath, "README.md"));
+        const solution = readFile(path.join(entryPath, "Solution.cs"));
         problems.push({
           id: `${category}/${entry.name}`,
-          number: lcNum,
-          title,
+          number: parseNumber(entry.name),
+          title: parseTitle(entry.name),
           category,
-          difficulty: diff,
-          readme: "",
+          difficulty: category as "Easy" | "Medium" | "Hard",
+          readme,
           solution,
-          lastModified: mtime,
-          dateLabel: parsed?.dateLabel ?? "",
-          dateISO:   parsed?.dateISO   ?? "",
-          leetcodeNumber: lcNum,
+          lastModified: lastModified(entryPath),
+          dateLabel: "",
+          dateISO: "",
+          leetcodeNumber: null,
         });
-      } else {
-        // Easy / Medium / Hard flat .cs file
+      }
+    } else if (entry.isFile()) {
+      if (category === "Daily Problems") {
+        const p = scanDailyFile(entryPath, entry.name, category, diffMap);
+        if (p) problems.push(p);
+      } else if (entry.name.endsWith(".cs")) {
         problems.push({
           id: `${category}/${entry.name}`,
           number: parseNumber(entry.name),
@@ -174,8 +177,8 @@ function scanCategory(category: Category, diffMap: Record<string, Difficulty>): 
           category,
           difficulty: category as "Easy" | "Medium" | "Hard",
           readme: "",
-          solution,
-          lastModified: mtime,
+          solution: readFile(entryPath),
+          lastModified: lastModified(entryPath),
           dateLabel: "",
           dateISO: "",
           leetcodeNumber: null,
@@ -183,6 +186,7 @@ function scanCategory(category: Category, diffMap: Record<string, Difficulty>): 
       }
     }
   }
+  
 
   // Sort daily by date descending (newest first), others by number ascending
   if (category === "Daily Problems") {
